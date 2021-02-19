@@ -22,7 +22,7 @@ namespace Employee_Api.Data
             _context.Add(employee);
         }
 
-        public IEnumerable<Employee> GetAllEmployee(Employee employee)
+        public IEnumerable<Employee> GetAllEmployee()
         {
             return _context.employees.ToList();
         }

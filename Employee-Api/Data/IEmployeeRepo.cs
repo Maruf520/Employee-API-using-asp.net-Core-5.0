@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Employee_Api.Data
 {
-    interface IEmployeeRepo
+    public interface IEmployeeRepo
     {
         bool SaveChanges();
-        IEnumerable<Employee> GetAllEmployee(Employee employee);
+        IEnumerable<Employee> GetAllEmployee();
         Employee GetEmployeeById(int id);
         void CreateEmployee(Employee employee);
 
