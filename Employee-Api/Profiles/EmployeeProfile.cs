@@ -13,6 +13,7 @@ namespace Employee_Api.Profiles
         public EmployeeProfile()
         {
             CreateMap<Employee, EmployeeReadDto>();
+            CreateMap<EmployeeCreateDto, Employee>();
         }
     }
 }

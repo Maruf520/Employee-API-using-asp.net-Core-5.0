@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Employee_Api.Data;
 using Employee_Api.Dtos;
+using Employee_Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -42,6 +43,21 @@ namespace Employee_Api.Controllers
             return NotFound();
         }
 
+
+        //POST api/employee
+        [HttpPost]
+        public ActionResult <EmployeeCreateDto> CreateEmployee(EmployeeCreateDto createDto)
+        {
+            var employeeModel = _mapper.Map<Employee>(createDto);
+
+            _employeeRepo.CreateEmployee(employeeModel);
+
+            _employeeRepo.SaveChanges();
+
+            var employeeReadDto = _mapper.Map<EmployeeReadDto>(employeeModel);
+
+            return CreatedAtRoute(nameof(GetEmployeeById), new { Id = employeeReadDto.Id}, employeeReadDto);
+        }
 
     }
 }
