@@ -29,7 +29,13 @@ namespace Employee_Api
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            /*       services.AddControllers().AddNewtonsoftJson(s => s.SerializerSettings.ContractResolver = new CamelCasePropertyNameContractResolver());*/
+
+            services.AddMvc().AddJsonOptions(o =>
+            {
+                o.JsonSerializerOptions.PropertyNamingPolicy = null;
+                o.JsonSerializerOptions.DictionaryKeyPolicy = null;
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Employee_Api", Version = "v1" });

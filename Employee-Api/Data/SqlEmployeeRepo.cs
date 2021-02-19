@@ -36,5 +36,10 @@ namespace Employee_Api.Data
         {
             return (_context.SaveChanges() >= 0);
         }
+
+        public void UpdateEmployee(Employee employee)
+        {
+            //
+        }
     }
 }

@@ -2,11 +2,13 @@
 using Employee_Api.Data;
 using Employee_Api.Dtos;
 using Employee_Api.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.JsonPatch.Adapters;
 
 namespace Employee_Api.Controllers
 {
@@ -58,6 +60,53 @@ namespace Employee_Api.Controllers
 
             return CreatedAtRoute(nameof(GetEmployeeById), new { Id = employeeReadDto.Id}, employeeReadDto);
         }
+
+
+        //PUT api/employee/{id}
+        [HttpPut("{id}")]
+        public ActionResult UpdateEmployee(int id, EmployeeUpdateDto employeeUpdateDto)
+        {
+            var employe = _employeeRepo.GetEmployeeById(id);
+
+            if(employe == null)
+            {
+                return NotFound();
+            }
+
+            _mapper.Map(employeeUpdateDto, employe);
+
+            _employeeRepo.UpdateEmployee(employe);
+            _employeeRepo.SaveChanges();
+
+            var employeeReadDto = _mapper.Map<EmployeeReadDto>(employe);
+
+            return CreatedAtRoute(nameof(GetEmployeeById), new { Id = employeeReadDto.Id }, employeeReadDto);
+        }
+
+        //PATCH api/employee
+           [HttpPatch("{id}")]
+           public ActionResult PartialEmployeeUpdate(int id, JsonPatchDocument<EmployeeUpdateDto> patchDoc)
+        {
+            var employeeFromModel = _employeeRepo.GetEmployeeById(id);
+
+            if(employeeFromModel == null)
+            {
+                return NotFound();
+            }
+
+            var employeeToPatch = _mapper.Map<EmployeeUpdateDto>(employeeFromModel);
+            patchDoc.ApplyTo(employeeToPatch, (IObjectAdapter)ModelState);
+
+            if (!TryValidateModel(employeeToPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
+            _mapper.Map(employeeFromModel, employeeToPatch);
+            _employeeRepo.SaveChanges();
+            return NoContent();
+        }
+
+
 
     }
 }

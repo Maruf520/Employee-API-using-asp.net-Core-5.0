@@ -12,6 +12,7 @@ namespace Employee_Api.Data
         IEnumerable<Employee> GetAllEmployee();
         Employee GetEmployeeById(int id);
         void CreateEmployee(Employee employee);
+        void UpdateEmployee(Employee employee);
 
     }
 }
